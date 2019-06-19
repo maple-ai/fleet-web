@@ -1,0 +1,126 @@
+mixin navbar()
+	.nav-item.hidden-xs-down &nbsp;&nbsp;&nbsp;
+	a.nav-item.nav-link([routerLink]="['/drivers']", [routerLinkActive]="['active']") For Drivers
+	a.nav-item.nav-link([routerLink]="['/for-business']", [routerLinkActive]="['active']") For Business
+	a.nav-item.nav-link([routerLink]="['/contact-us']", [routerLinkActive]="['active']") Contact us
+
+mixin google(text)
+	.abcRioButton.abcRioButtonBlue(style='height:64px;width:100%;', (click)="googleSignin()")
+		.abcRioButtonContentWrapper
+			.abcRioButtonIcon(style='padding:19px')
+				.abcRioButtonSvgImageWithFallback.abcRioButtonIconImage.abcRioButtonIconImage18(style='width:24px;height:24px;')
+					svg.abcRioButtonSvg(version='1.1', xmlns='http://www.w3.org/2000/svg', width='24px', height='24px', viewbox='0 0 48 48')
+						g(transform="scale(0.5)")
+							path(fill='#EA4335', d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z')
+							path(fill='#4285F4', d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z')
+							path(fill='#FBBC05', d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z')
+							path(fill='#34A853', d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z')
+							path(fill='none', d='M0 0h48v48H0z')
+			span.abcRioButtonContents(style='font-size:16px;line-height:62px;')
+				span= text
+
+.fixed-top
+	.navbar.navbar-dark.navbar-toggleable.bg-primary: .container
+		.navbar-nav.hidden-sm-down.mr-auto
+			a.nav-item.nav-link(href="https://www.facebook.com/Maple Intelligence Pte Ltd", style="color: rgba(255, 255, 255, 0.5);")
+				i.fa.fa-fw.fa-facebook
+			a.nav-item.nav-link(href="https://twitter.com/maple", style="color: rgba(255, 255, 255, 0.5);")
+				i.fa.fa-fw.fa-twitter
+			a.nav-item.nav-link(href="https://instagram.com/maple.ai_", style="color: rgba(255, 255, 255, 0.5);")
+				i.fa.fa-fw.fa-instagram
+
+		ul.navbar-nav
+			li.nav-item(*ngIf="!loggedIn"): button.btn.btn-primary.btn-white-outline(type="button", (click)="showRegisterModal()" style="padding-top: 7px;padding-bottom: 7px;margin-top: 2px;  border-radius: 8px; font-size: 0.9rem") Register
+			li.nav-item.hidden-xs-down &nbsp;
+			li.nav-item(*ngIf="!loggedIn"): button.btn.btn-primary.btn-white-outline(type="button", (click)="showLoginModal()" style="padding-top: 5px;padding-bottom: 5px;margin-top: 4px; border-radius: 8px; font-size: 0.9rem") Log In
+			li.nav-item(*ngIf="loggedIn"): a.nav-link.text-right.text-sm-left([routerLink]="['/user']", style="color: rgba(255, 255, 255, 0.5)") {{ user?.name }}
+
+	.navbar.navbar-toggleable.navbar-light.navbar-maple(style="background-color: rgba(255, 255, 255, 0.9);"): .container
+		a.navbar-brand.float-left([routerLink]="['/']", style="padding-top: 0.15rem;")
+			img.img-fluid(src="../../assets/maple-logo.png" style="max-height: 30px; max-width: 60vw")
+		button.navbar-toggler.hidden-sm-up.float-right((click)="navbarCollapsed = !navbarCollapsed") &#9776;
+
+		.clearfix.hidden-sm-up
+
+		.navbar-nav.hidden-sm-up([collapse]="navbarCollapsed")
+			+navbar()
+		.navbar-nav.hidden-xs-down
+			+navbar()
+
+.clearfix.navbar-fix
+router-outlet
+
+.clearfix
+
+footer: .container(style="padding-top: 30px;")
+	ul.nav.flex-column
+		li.nav-item: a.nav-link Privacy policy
+		li.nav-item: a.nav-link Terms &amp; Conditions
+
+	br
+	br
+	br
+
+	p ©2016 Maple Intelligence Pte Ltd Group Limited. All Rights Reserved
+
+.modal.fade(bsModal, #loginModal="bs-modal", tabindex="-1" role="dialog")
+	.modal-dialog
+		.modal-content.col-sm-10.offset-sm-1
+			.modal-header
+				h4.modal-title Login To Your Account
+			.modal-body
+				form#loginForm
+					.form-group.text-sm-center
+						p.help-text(*ngIf="authDetails.status.length > 0") {{ authDetails.status }}
+						+google("Sign in with Google")
+					.form-group.text-center OR
+					.form-group: input.form-control.custom-field.email-field(type="email", [(ngModel)]="authDetails.email", name="email" placeholder="Email Address", style="height: 64px;font-size: 16px;")
+					.form-group: input.form-control.custom-field.lock-field(type="password", [(ngModel)]="authDetails.password", name="password" placeholder="Password", style="height: 64px;font-size: 16px;")
+					.form-group
+						.text-center.text-sm-left
+							.float-left: label.custom-control.custom-checkbox
+								input.custom-control-input(type="checkbox", [(ngModel)]="authDetails.remember", name="rememberMe")
+								span.custom-control-indicator
+								span.custon-control-description &zwnj;Remember me
+							.float-right: a(style="color: #07aa88; text-decoration: none; cursor: pointer;", (click)="showForgotModal()") Forgot Password?
+						.clearfix
+					.form-group: button.btn.btn-block.btn-primary.btn-no-radius((click)="login()", style="height: 64px;font-size: 16px;") Login
+					.clearfix
+			.modal-footer.justify-content-between.flex-row
+				.text-muted Don't have an account yet?
+				button.btn.btn-sm.btn-inverted.btn-no-radius((click)="showRegisterModal()") Register as a<br/>Maple Intelligence Pte Ltd Driver
+
+.modal.fade(bsModal, #registerModal="bs-modal", tabindex="-1" role="dialog")
+	.modal-dialog
+		.modal-content.col-sm-10.offset-sm-1
+			.modal-header
+				h4.modal-title Register as a Maple Intelligence Pte Ltd Driver
+			.modal-body
+				form#registerForm
+					.form-group.text-sm-center
+						p.help-text(*ngIf="authDetails.status.length > 0") {{ authDetails.status }}
+						+google("Sign up with Google")
+					.form-group.text-center OR
+					.form-group: input.form-control.custom-field.user-field(type="text", [(ngModel)]="authDetails.name", name="name", style="height: 64px;font-size: 16px;" placeholder="Full Name")
+					.form-group: input.form-control.custom-field.email-field(type="email", [(ngModel)]="authDetails.email", name="email", style="height: 64px;font-size: 16px;" placeholder="Email Address")
+					.form-group: input.form-control.custom-field.lock-field(type="password", [(ngModel)]="authDetails.password", name="password", style="height: 64px;font-size: 16px;" placeholder="Password")
+					.form-group: input.form-control.custom-field.lock-field(type="tel", [(ngModel)]="authDetails.phone_number", name="phone_number", style="height: 64px;font-size: 16px;" placeholder="Phone Number")
+					.form-group(style="font-size: 16px;"): .form-check: label.form-check-label
+						input.form-check-input(type="checkbox", [(ngModel)]="authDetails.no_unspent_criminal", name="no_unspent_criminal")
+						| &nbsp;I have no unspent Criminal Convictions
+					.form-group: button.btn.btn-block.btn-primary.btn-no-radius((click)="register()", style="height: 64px;font-size: 16px;") Register as a Maple Intelligence Pte Ltd Driver
+			.modal-footer.justify-content-between.flex-row
+				.text-muted Already a Maple Intelligence Pte Ltd member?
+				button.btn.btn-sm.btn-inverted.btn-no-radius((click)="showLoginModal()") Sign in
+
+.modal.fade(bsModal, #forgotModal="bs-modal", tabindex="-1" role="dialog"): .modal-dialog
+	.modal-content.col-sm-10.offset-sm-1
+		.modal-header
+			h4.modal-title Password Reset
+		.modal-body
+			form#loginForm
+				.form-group.text-sm-center
+					p.help-text(*ngIf="authDetails.status.length > 0") {{ authDetails.status }}
+				.form-group: input.form-control.custom-field.email-field(type="email", [(ngModel)]="authDetails.email", name="email" placeholder="Email Address", style="height: 64px;font-size: 16px;")
+				.form-group: button.btn.btn-block.btn-primary.btn-no-radius((click)="forgot()", style="height: 64px;font-size: 16px;") Send Reset Instructions
+				.clearfix

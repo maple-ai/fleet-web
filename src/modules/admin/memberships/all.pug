@@ -1,0 +1,76 @@
+.container-fluid
+  .btn-group
+    button.btn([class.btn-info]="state == 'uncontacted'", [class.btn-secondary]="state != 'uncontacted'", (click)="setState('uncontacted')") {{ stats?.uncontacted }} Uncontacted Members
+    button.btn([class.btn-info]="state == 'contacted'", [class.btn-secondary]="state != 'contacted'", (click)="setState('contacted')") {{ stats?.contacted }} Contacted Members
+    button.btn([class.btn-info]="state == 'new'", [class.btn-secondary]="state != 'new'", (click)="setState('new')") Not Submitted
+
+  button.btn.btn-info([class.active]="sortName", (click)="updateSort()", style="margin-left: 10px;")
+    i.fa.fa-fw([class.fa-sort-alpha-asc]="!sortName", [class.fa-sort-numeric-asc]="sortName")
+    |  sort
+
+  br
+  table.table.table-maple(*ngIf="state == 'new'")
+    thead: tr
+      th User Name
+      th Email Address
+      th Last login
+      th Last activity
+      th &nbsp;
+
+    tbody
+      tr(*ngFor="let user of members")
+        td {{ user.name }}
+        td {{ user.email }}
+        td {{ user.last_login | date:'short' }}
+        td {{ user.last_access | date:'short' }}
+        td
+          button.btn.btn-primary.btn-sm.float-sm-right((click)="openUser(user)") Access
+
+  table.table.table-maple(*ngIf="state != 'new'")
+    thead: tr
+      th User Name
+        br
+        | Email Address
+      th City
+        br
+        | Rating
+      th Phone Number
+        br
+        | Driving License
+      th On Boarding Session Date
+      th &nbsp;
+
+    tbody
+      tr(*ngFor="let user of members", [class.bg-information]="user.membership.license == 'full'")
+        td {{ user.name }}
+          br
+          | {{ user.email }}
+        td
+          small {{ user.membership.work_city }}
+          br
+          i.fa.fa-fw([class.fa-star]="user.membership.rating >= 1", [class.fa-star-o]="user.membership.rating < 1", (click)="setRating(user, 1)", style="cursor: pointer;")
+          i.fa.fa-fw([class.fa-star]="user.membership.rating >= 2", [class.fa-star-o]="user.membership.rating < 2", (click)="setRating(user, 2)", style="cursor: pointer;")
+          i.fa.fa-fw([class.fa-star]="user.membership.rating >= 3", [class.fa-star-o]="user.membership.rating < 3", (click)="setRating(user, 3)", style="cursor: pointer;")
+          i.fa.fa-fw([class.fa-star]="user.membership.rating >= 4", [class.fa-star-o]="user.membership.rating < 4", (click)="setRating(user, 4)", style="cursor: pointer;")
+          i.fa.fa-fw([class.fa-star]="user.membership.rating == 5", [class.fa-star-o]="user.membership.rating < 5", (click)="setRating(user, 5)", style="cursor: pointer;")
+        td {{ user.membership.phone_number }}
+          br
+          small: strong {{ user.membership.license | uppercase }}
+        td
+          form.form-inline
+            .form-group([class.has-danger]="user.membership.has_error")
+              input.form-control.form-control-sm(type="text", [(ngModel)]="user.membership.interview_date", name="interview_date" placeholder="DD/MM/YYYY")
+            .form-group
+              input.form-control.form-control-sm(type="time", [(ngModel)]="user.membership.interview_time", name="interview_time" placeholder="hh:mm")
+            button.btn.btn-secondary.btn-sm((click)="saveInterviewDate(user)") Save
+        td
+          button.btn.btn-primary.btn-sm.float-sm-right((click)="openUser(user)") Access
+
+.modal.fade(bsModal, #membershipInfoModal="bs-modal", tabindex="-1" role="dialog"): .modal-dialog(*ngIf="membership")
+  .modal-content
+    .modal-header
+      h4.modal-title Membership Information
+    .modal-body
+      form
+        include ../../membership/membership.driverDetails.pug
+        include ../../membership/membership.address.pug

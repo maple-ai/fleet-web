@@ -1,0 +1,24 @@
+.container-fluid
+	table.table.table-maple
+		thead: tr
+			th Registration
+			th Engine Size
+			th
+				.btn-group.float-sm-right
+					a.btn.btn-sm.btn-primary.btn-no-radius([routerLink]="['./new']", *ngIf="canEdit") new bike
+					a.btn.btn-sm.btn-secondary([routerLink]="['../garages']") manage garages
+
+		tbody: tr(*ngFor="let bike of bikes", [class.bg-faded]="!bike.available")
+			td.
+				#<strong>{{ bike.bike_number }}</strong> - {{ bike.registration }}
+				<i class="fa fa-fw fa-times" *ngIf="!bike.available" title="Bike not available"></i>
+			td {{ bike.engine_size }}cc
+			td
+				.btn-group.float-sm-right
+					a.btn.btn-sm([routerLink]="['./', bike._id, 'maintenance']", [class.btn-secondary]="!isMechanic || (isMechanic && !bike.maintenance_needed)", [class.btn-warning]="isMechanic && bike.maintenance_needed")
+						i.fa.fa-fw.fa-bell-o(*ngIf="bike.maintenance_needed")
+						|  maintenance
+					a.btn.btn-sm([routerLink]="['./', bike._id, 'shifts']", [class.btn-secondary]="!isMechanic || (isMechanic && !bike.shift_maintenance)", [class.btn-warning]="isMechanic && bike.shift_maintenance", style="margin-left: 5px;")
+						i.fa.fa-fw.fa-bell-o(*ngIf="bike.shift_maintenance")
+						|  shifts
+					a.btn.btn-sm.btn-secondary([routerLink]="['./', bike._id]", *ngIf="canEdit", style="margin-left: 5px;") edit

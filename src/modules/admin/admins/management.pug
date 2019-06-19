@@ -1,0 +1,13 @@
+.container-fluid: table.table.table-hover.table-sm.table-maple
+	thead: tr
+		th Name
+		th Email
+		th Last Login
+		th Last Access
+		th Type
+	tbody: tr(*ngFor="let user of users", (click)="openUser(user)", style="cursor: pointer;")
+		td {{ user.name }}
+		td: a([href]="'mailto:' + user.email") {{ user.email }}
+		td {{ user.last_login }}
+		td {{ user.last_access }}
+		td {{ user.user_type }}

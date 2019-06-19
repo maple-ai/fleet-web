@@ -1,0 +1,18 @@
+.container
+	br
+	table.table.table-hover.table-maple.table-sm
+		thead: tr
+			th Date
+			th Shifts
+			th Wages
+			th Total Paid
+		tbody
+			tr(*ngFor="let week of weeks")
+				td {{ week.week }}
+				td
+					span(*ngFor="let shift of week.shifts", style="display: block;") {{ shift.dateFormatted }}
+				td
+					span(*ngFor="let shift of week.shifts", style="display: block;") £{{ shift.paid_amountFormatted }}
+				td
+					span(*ngFor="let shift of week.shifts", style="display: block;") &nbsp;
+					| £{{ week.totalFormatted }}

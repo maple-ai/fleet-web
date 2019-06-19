@@ -1,0 +1,48 @@
+.container
+  br
+
+  .row
+    .col-3.col-sm-4
+      button.float-sm-right.float-left.btn.btn-link((click)="navigateMonth(-1)"): i.fa.fa-fw.fa-arrow-left
+    .col-6.col-sm-4
+      h5.text-center(style="padding: 10px 0;") {{ month.name }}
+    .col-3.col-sm-4
+      button.btn.btn-link.float-right.float-sm-left((click)="navigateMonth(1)"): i.fa.fa-fw.fa-arrow-right
+
+  table.table.table-sm.table-bordered
+    thead: tr
+      th.text-sm-center(style="width: calc(100% / 7);")
+        span.hidden-sm-up Mon
+        span.hidden-xs-down Monday
+      th.text-sm-center(style="width: calc(100% / 7);")
+        span.hidden-sm-up Tue
+        span.hidden-xs-down Tuesday
+      th.text-sm-center(style="width: calc(100% / 7);")
+        span.hidden-sm-up Wed
+        span.hidden-xs-down Wednesday
+      th.text-sm-center(style="width: calc(100% / 7);")
+        span.hidden-sm-up Thu
+        span.hidden-xs-down Thursday
+      th.text-sm-center(style="width: calc(100% / 7);")
+        span.hidden-sm-up Fri
+        span.hidden-xs-down Friday
+      th.text-sm-center(style="width: calc(100% / 7);")
+        span.hidden-sm-up Sat
+        span.hidden-xs-down Saturday
+      th.text-sm-center(style="width: calc(100% / 7);")
+        span.hidden-sm-up Sun
+        span.hidden-xs-down Sunday
+    tbody: tr(*ngFor="let week of weeks"): td(*ngFor="let day of week")
+      span.text-sm-center(style="display: block; background: #DDD;", [class.bg-brand]="day.isToday") {{ day.day }}
+      div(style="min-height: 80px; display: block;", [class.bg-faded]="day.month != month.month")
+        .text-sm-center(*ngFor="let shift of day.shifts", (click)="openShift(day, shift)", style="display: block; cursor: pointer;")
+          | Bike {{ shift.bike.bike_number }}
+          span(*ngIf="shift.status == 'created'")  (pending)
+          span(*ngIf="shift.status != 'created' && shift.status != 'cancelled'")  (approved)
+          span(*ngIf="shift.status == 'cancelled'")  (cancelled)
+
+        .text-sm-center.text-muted(*ngIf="day.canCreateShift && day.shifts.length == 0 && day.month == month.month", (click)="openShift(day)", style="display: block; cursor: pointer; font-size: 70%;")
+          i.fa.fa-fw.fa-plus
+          | Shift
+
+include edit

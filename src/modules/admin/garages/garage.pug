@@ -1,0 +1,36 @@
+.container-fluid
+	form
+		.form-group.row
+			.offset-sm-4.col-sm-8
+				h1(*ngIf="garage._id") Edit Garage
+				h1(*ngIf="!garage._id") New Garage
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Name
+			.col-sm-6
+				input.form-control(type="text" placeholder="Garage Name", [(ngModel)]="garage.name", name="name")
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Capacity
+			.col-sm-6
+				input.form-control(type="number" min="0" placeholder="Capacity of garage", [(ngModel)]="garage.capacity", name="capacity")
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Latitude
+			.col-sm-6
+				input.form-control(type="number" placeholder="Latitude", [(ngModel)]="garage.location.lat", name="latitude")
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Longitude
+			.col-sm-6
+				input.form-control(type="number" placeholder="Longitude", [(ngModel)]="garage.location.lng", name="longitude")
+
+		.form-group.row
+			.col-sm-6.offset-sm-4
+				button.btn.btn-primary((click)="save()")
+					span(*ngIf="!garage._id") Create
+					span(*ngIf="garage._id") Save
+
+div.bg-danger(*ngIf="garage._id"): .container-fluid(style="padding-top: 30px; padding-bottom: 30px;")
+	.row: .col-sm-6.offset-sm-4
+		h3 Danger area
+
+		button.btn.btn-secondary((click)="delete()") Delete garage

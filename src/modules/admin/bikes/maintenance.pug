@@ -1,0 +1,63 @@
+.container-fluid
+	div(*ngIf="!notes || notes.length == 0")
+		h6.text-sm-center.text-muted No maintenance logs kept here
+		p.text-sm-center: button.btn.btn-primary((click)="newLog()") New Log
+
+	.row(*ngIf="notes && notes.length > 0")
+		.col-sm-4
+			p
+				button.btn.btn-primary((click)="newLog()") New Log
+				| &nbsp; #<strong>{{ bike.bike_number }}</strong> - {{ bike.registration }}
+
+			.card(*ngFor="let note of notes", (click)="openNote(note)", style="cursor: pointer;")
+				.card-block([class.card-inverse]="note.mechanic_required && isMechanic", [class.bg-warning]="note.mechanic_required && isMechanic")
+					h5.card-title(style="margin-bottom: 0;") {{ note.checkedAtFormatted }}
+						span.float-sm-right(*ngIf="note.has_attachment"): i.fa.fa-fw.fa-file-pdf-o
+						span.float-sm-right(*ngIf="note.mechanic_required"): i.fa.fa-fw.fa-bell-o
+					p(style="margin: 0;") {{ note.notes }}
+
+		.col-sm-8(*ngIf="operatorNotes")
+			.alert.alert-info(*ngIf="status.length > 0") {{ status }}
+
+			form
+				.form-group
+					label Date Checked
+					input.form-control(type="datetime-local", [(ngModel)]="operatorNotes.checked_at", name="checked_at")
+
+				.form-group
+					label Notes
+					textarea.form-control([(ngModel)]="operatorNotes.notes", name="condition", rows="6")
+
+				.form-group
+					button.btn.btn-primary((click)="saveNotes()") Save Log
+					.btn-group.float-sm-right
+						button.btn((click)="requestMechanicAttention()", [class.btn-secondary]="!operatorNotes.mechanic_required", [class.btn-warning]="operatorNotes.mechanic_required")
+							i.fa.fa-fw([class.fa-bell-o]="!operatorNotes.mechanic_required", [class.fa-bell-slash-o]="operatorNotes.mechanic_required")
+							span(*ngIf="operatorNotes.mechanic_required && isMechanic")  Acknowledge Alert
+							span(*ngIf="!isMechanic || (!operatorNotes.mechanic_required && isMechanic)")  Alert Mechanic
+						button.btn.btn-danger((click)="deleteNote()")
+							i.fa.fa-fw.fa-trash-o
+							|  Delete Log
+
+			hr
+
+			form
+				.form-group(*ngIf="!operatorNotes.has_attachment")
+					label Attachment Upload
+						span(*ngIf="(uploader.queue.length > 0 && uploader.queue[0]?.isSuccess) || status.license_cbt")  (upload completed)
+					input.form-control(type="file" ng2FileSelect, [uploader]="uploader", name="attachment")
+					progress.progress([value]="uploader.queue[0]?.progress", max="100")
+
+					button.btn.btn-primary((click)="uploadAttachment()") Upload Attachment
+
+				button.btn.btn-primary((click)="openAttachment()", *ngIf="operatorNotes.has_attachment")
+					i.fa.fa-fw.fa-external-link
+					| &nbsp;Open Attachment
+				button.btn.btn-danger((click)="deleteAttachment()", *ngIf="operatorNotes.has_attachment", style="margin-left: 10px;")
+					i.fa.fa-fw.fa-trash-o
+					|  Delete Attachment
+
+		.col-sm-8(*ngIf="!operatorNotes")
+			p.text-muted.text-sm-center
+				i.fa.fa-fw.fa-hand-o-left
+				| &nbsp;select log

@@ -1,0 +1,32 @@
+.container-fluid
+	p.help-text.text-muted.text-sm-center(*ngIf="!users || users.length == 0") All maple drivers are paid!<br/> Great job <i class="fa fa-fw fa-thumbs-up"></i>
+	table.table-sm.table.table-maple(*ngFor="let user of users")
+		thead: tr
+			th(style="width: 50%"): a([routerLink]="['/admin/users', user._id, 'wages']") {{ user.name }} (ID: {{ user.membership.id }})
+			th Wages
+		tbody
+			tr(*ngFor="let shift of user.shifts; let i = index")
+				td: pre(style="margin-bottom: 0;") {{ shift.dateFormatted }}
+				td £{{ shift.wagesFormatted }}
+			tr
+				td.text-sm-right: strong Total
+				td £{{ user.totalFormatted }}
+					button.btn.btn-primary.float-sm-right((click)="payUser(user)") pay
+
+.modal.fade(bsModal, #payoutModal="bs-modal", tabindex="-1" role="dialog"): .modal-dialog
+	.modal-content(*ngIf="payoutUser")
+		.modal-header
+			h4.modal-title Create a Payout
+		.modal-body
+			form
+				.form-group.row(*ngFor="let shift of payoutUser.shifts; let i = index")
+					label.col-sm-7.col-form-label([class.text-danger]="shift.removed") {{ shift.dateFormatted }}
+					.col-sm-1
+						button.btn.btn-sm([class.btn-danger]="!shift.removed", [class.btn-info]="shift.removed", (click)="toggleShift(shift)")
+							i.fa([class.fa-times]="!shift.removed", [class.fa-check]="shift.removed")
+					.col-sm-4
+						input.form-control(type="number", [(ngModel)]="shift.total", [name]="'wages_' + i", step="0.01", (ngModelChange)="calculateTotal()")
+		.modal-footer
+			span {{ status }}
+			button.btn.btn-secondary.float-sm-left((click)="payoutModal.hide()") Dismiss
+			button.btn.btn-primary((click)="confirmPay()") Pay £{{ payoutUser.totalFormatted }}

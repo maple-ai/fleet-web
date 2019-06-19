@@ -1,0 +1,81 @@
+.container-fluid(*ngIf="shift != null")
+	.row
+		.col-sm-5
+			form
+				.form-group
+					label Bike registration
+					input.form-control(type="text" disabled, [value]="'#' + shift.bike[0].bike_number + ' ' + shift.bike[0].registration")
+				.form-group
+					label Requested Start
+					input.form-control(type="text" disabled, [value]="shift.dateTimeFormatted")
+				.form-group
+					label Shift Status
+					input.form-control(type="text" disabled, [value]="shift.status")
+				.form-group
+					label Shift Start
+					input.form-control(type="text", [(ngModel)]="shift.checkInFormatted", placeholder="HH:mm", name="checkInFormatted")
+				.form-group(*ngIf="shift.check_out")
+					label Shift End
+					input.form-control(type="text", [(ngModel)]="shift.checkOutFormatted", placeholder="HH:mm", name="checkOutFormatted")
+				.form-group
+					button.btn.btn-primary(*ngIf="!shift.check_in", (click)="checkIn(null)") Start Shift
+					button.btn.btn-primary(*ngIf="shift.check_in && !shift.check_out", (click)="checkOut(null)") End Shift
+					button.btn.btn-primary(*ngIf="shift.check_in && shift.check_out", (click)="saveCheckIn()") Overwrite Start & End
+					button.btn.btn-danger.float-sm-right((click)="resetShift()", *ngIf="shift.check_in && !shift.paid")
+						span(*ngIf="!clickedResetAlready") Reset
+						span(*ngIf="clickedResetAlready") Confirm - Reset
+					.clearfix
+					p.help-text.text-muted(*ngIf="status && status.length > 0") {{ status }}
+		.col-sm-7
+			.row
+				.col-sm-6: .card
+					img.card-image-top.img-fluid([src]="getDriverLicenseSrc()")
+					.card-block
+						h4.card-title.text-sm-center: a([routerLink]="[routerDestination + '/users', shift.user[0]._id, 'membership']") {{ shift.user[0].name }}
+				.col-sm-6
+					form
+						.form-group
+							label Shift Notes
+							textarea.form-control(rows="10", [(ngModel)]="shift.notes", name="notes")
+						.form-group
+							button.btn.btn-primary((click)="saveNotes()") Save Notes
+						.form-group(*ngIf="shift.status == 'confirmed'")
+							button.btn.btn-danger((click)="deleteShift()") Delete Shift
+
+	.row: .col-sm-12: ul.nav.nav-tabs
+		li.nav-item: a.nav-link(style="cursor: pointer;", [class.active]="state == 'operator'", (click)="setState('operator')") Operator Notes
+		li.nav-item: a.nav-link(style="cursor: pointer;", [class.active]="state == 'map'", (click)="setState('map')") Map
+		li.nav-item: a.nav-link(style="cursor: pointer;", [class.active]="state == 'table'", (click)="setState('table')") Table
+		li.nav-item: a.nav-link(style="cursor: pointer;", [class.active]="state == 'speed'", (click)="setState('speed')") Speed Analysis
+
+.container-fluid(*ngIf="state == 'operator'")
+	br
+	include ./operator-notes
+.container-fluid(*ngIf="state == 'map'")
+	br
+	p.text-muted(*ngIf="shift == null || !shift.check_in") Shift not checked in
+	p.text-muted(*ngIf="!locationHistory || locationHistory.length == 0") No positioning data!
+
+	div(*ngIf="shift != null && shift.check_in", #googleMap="", style="height: 70vh; min-height: 300px;")
+
+.container-fluid(*ngIf="state == 'table'")
+	br
+	p.text-muted(*ngIf="shift == null || !shift.check_in") Shift not checked in
+
+	div(*ngIf="shift != null && shift.check_in"): table.table.table-sm.table-maple
+		thead: tr
+			th Time
+			th Address
+			th Speed
+			th Direction
+		tbody: tr(*ngFor="let loc of locationHistory")
+			td {{ loc.fixTimeFormatted }}
+			td {{ loc.address }}
+			td {{ loc.speed.toFixed(1) }} mph
+			td {{ loc.course.toFixed(0) }}°
+
+.container-fluid(*ngIf="state == 'speed'")
+	br
+	p.text-muted(*ngIf="shift == null || !shift.check_in") Shift not checked in
+
+	div(*ngIf="shift != null && shift.check_in", #speedChart="", style="height: 70vh; min-height: 300px;")

@@ -1,0 +1,41 @@
+.container
+	form
+		.form-group
+			label Shift information
+			textarea.form-control(rows="5", [(ngModel)]="settings.shift_description", name="shift_description")
+		.form-group.row(*ngFor="let day of settings.days")
+			label.text-sm-right.col-form-label.col-sm-4 {{ day.name }}
+			.col-sm-8
+				.row(*ngFor="let hour of day.hours; let i = index", style="margin-bottom: 5px;")
+					.col-sm-8
+						select.form-control([(ngModel)]="hour.hour", [name]="day.name + '' + i")
+							option(value="0") 12 PM
+							option(value="1") 1 AM
+							option(value="2") 2 AM
+							option(value="3") 3 AM
+							option(value="4") 4 AM
+							option(value="5") 5 AM
+							option(value="6") 6 AM
+							option(value="7") 7 AM
+							option(value="8") 8 AM
+							option(value="9") 9 AM
+							option(value="10") 10 AM
+							option(value="11") 11 AM
+							option(value="12") 12 PM
+							option(value="13") 1 PM
+							option(value="14") 2 PM
+							option(value="15") 3 PM
+							option(value="16") 4 PM
+							option(value="17") 5 PM
+							option(value="18") 6 PM
+							option(value="19") 7 PM
+							option(value="20") 8 PM
+							option(value="21") 9 PM
+							option(value="22") 10 PM
+							option(value="23") 11 PM
+					.col-sm-4
+						button.btn.btn-danger((click)="day.hours.splice(index, 1)"): i.fa.fa-fw.fa-times
+				button.btn.btn-secondary((click)="day.hours.push({hour: 9})") New
+
+	button.btn.btn-success((click)="save()") Save
+	button.btn.btn-secondary((click)="reset()") Reset

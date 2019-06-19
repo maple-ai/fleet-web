@@ -1,0 +1,32 @@
+section.bg-faded: .container
+	.col-sm-10.offset-sm-1
+		br
+		br
+		h1.text-primary.text-center.text-sm-left CONTACT US
+
+	.row
+		.col-sm-5
+			form
+				.form-group
+					label Name
+					input.form-control(type="text" placeholder="Your Name *", [(ngModel)]="contact.name", name="name")
+				.form-group
+					label Email
+					input.form-control(type="email" placeholder="Email Address *", [(ngModel)]="contact.email", name="email")
+				.form-group
+					label Message
+					textarea.form-control(type="text" placeholder="Your Message to Maple Intelligence Pte Ltd *" rows="5", [(ngModel)]="contact.message", name="message")
+
+				p {{ status }}
+				.form-group.text-center.text-sm-left: button.btn.btn-primary((click)="send()") Send
+
+		.col-sm-7
+			br
+			br
+			br
+			h2.text-center.text-primary Get in touch!
+
+			br
+			h3.text-center 0207 389 0832
+			h3.text-center <a href="mailto:info@maple.com">info@maple.com</a>
+			br

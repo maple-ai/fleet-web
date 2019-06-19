@@ -1,0 +1,89 @@
+
+.carousel
+	.carousel-inner
+		.item.active
+			img.img-fluid(src="../../assets/banner.png")
+br
+.container: .col-sm-10.offset-sm-1
+
+	br
+	h1.text-center.text-primary(style="color: #F22613 !important; cursor: pointer; font-weight: 300;", (click)="openRegister()") WE ARE HIRING DRIVERS
+
+	br.hidden-xs-down
+	br.hidden-xs-down
+	h4.text-center Maple Intelligence Pte Ltd provides logistics solutions to restaurants, retailers and delivery businesses
+
+	br
+	p.text-center.
+		Patent pending delivery vehicle boasting an illuminated backbox showcasing partner brands while keeping the box contents protected, hygenic and safe
+		<br/><br/>
+		Our vehicles and drivers are available to restaurants, retailers<br/> couriers and other delivery businesses
+
+	.row.text-sm-center.hidden-xs-down
+		a((click)="openWhoAreButton($event)", style="display: block; cursor: pointer;")
+			img.img-fluid.col-sm-12(src="../../assets/who-are-you.png")
+	br
+	.row.text-center.text-sm-left
+		.col-sm-5.text-business
+			h3.hidden-sm-up BUSINESS
+			p(style="min-height: 90px;") Patented Maple Intelligence Pte Ltd bikes are for you and your drivers.
+
+			ul.list-unstyled
+				li
+					i.fa.fa-fw.fa-check
+					| Effective 24/7 branding
+				li
+					i.fa.fa-fw.fa-check
+					| Safe, robust delivery box
+				li
+					i.fa.fa-fw.fa-check
+					| Hygenic and sealed delivery box
+				li
+					i.fa.fa-fw.fa-check
+					| Reliable and attractive bike
+			.col-12.text-center: button.btn.btn-lg.btn-business([routerLink]="['/for-business']") Sign up now
+			.clearfix
+		hr.hidden-sm-up
+		.col-sm-5.offset-sm-2.text-primary
+			h3.hidden-sm-up DRIVERS
+			p(style="min-height: 90px;") Maple Intelligence Pte Ltd bikes are available, enabling you to work for delivery businesses.
+			ul.list-unstyled
+				li
+					i.fa.fa-fw.fa-check
+					| Work up to 11 hours a day
+				li
+					i.fa.fa-fw.fa-check
+					| Includes Fleet Management Insurance TPO
+				li
+					i.fa.fa-fw.fa-check
+					| Work for a range of different businesses
+				li
+					i.fa.fa-fw.fa-check
+					| Located at Leicester Square
+			br
+			.col-12.text-center: button.btn.btn-lg.btn-primary([routerLink]="['/drivers']") Sign up now
+	br
+	hr.col-sm-7.col-centered(style="margin-top: 70px;margin-bottom: 70px;")
+
+
+section.bg-primary: .container: .col-sm-10.offset-sm-1
+	br
+	br
+	br
+
+	p.text-center(style="color: white;") Our sign up process is quick and simple – you are only a few clicks away from your vehicle
+	h4.text-center(style="color: white;") JOIN THE  FAMILY TODAY
+
+	br
+	br
+
+	p.text-center: a.btn.btn-primary.btn-white-outline.btn-no-radius([routerLink]="['/contact-us']", style="padding: 13px 26px") Contact Us
+
+	br
+
+section: .container: .col-sm-10.offset-sm-1
+	br
+	br
+	.row: .col-sm-12: img.img-fluid(src="../../assets/bikes.png")
+	br
+	br

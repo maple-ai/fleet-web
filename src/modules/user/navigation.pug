@@ -1,0 +1,74 @@
+.navbar.navbar-toggleable.navbar-dark.bg-inverse(*ngIf="userPrivileges.admin || userPrivileges.supervisor"): .container
+	ul.navbar-nav
+		li.nav-item(*ngIf="userPrivileges.admin"): a.nav-link([routerLink]="['/admin/memberships']") HQ
+		li.nav-item(*ngIf="userPrivileges.supervisor"): a.nav-link([routerLink]="['/supervisor/users']") Attendant
+
+.navbar.navbar-light.navbar-maple.navbar-toggleable: .container
+	a.navbar-brand.float-left([routerLink]="['/']"): img.img-fluid(src="../../assets/maple-logo.png" style="max-height: 30px;")
+	button.navbar-toggler.hidden-sm-up.float-right((click)="navbarCollapsed = !navbarCollapsed") &#9776;
+
+	.clearfix.hidden-sm-up
+
+	//- mobile navigation
+	ul.navbar-nav.hidden-sm-up([collapse]="navbarCollapsed")
+		div(*ngIf="!hasMembership")
+			li.nav-item: a.nav-link([routerLink]="['/membership']", [routerLinkActive]="'active'") Application
+		div(*ngIf="hasMembership")
+			li.nav-item: a.nav-link([routerLink]="['/schedule']", [routerLinkActive]="'active'") Schedule
+			li.nav-item: a.nav-link([routerLink]="['/history']", [routerLinkActive]="'active'") History
+			li.nav-item: a.nav-link([routerLink]="['/wages']", [routerLinkActive]="'active'") Wages
+		li.nav-item: a.nav-link([routerLink]="['/help']", [routerLinkActive]="'active'") Help
+		li.nav-item: a.nav-link([routerLink]="['/user']", [routerLinkActive]="'active'") {{ user.name }}
+
+	//- desktop navigation
+	ul.navbar-nav.mr-auto.hidden-xs-down(style="text-transform:uppercase")
+		li.nav-item.hidden-xs-down &nbsp;&nbsp;&nbsp;
+		li.nav-item: a.nav-link([routerLink]="['/drivers']", [routerLinkActive]="['active']") For Drivers
+		li.nav-item: a.nav-link([routerLink]="['/for-business']", [routerLinkActive]="['active']") For Business
+		li.nav-item: a.nav-link([routerLink]="['/contact-us']", [routerLinkActive]="['active']") Contact us
+	ul.nav.navbar-nav.mr-0.hidden-xs-down
+		li.nav-item: a.nav-link([routerLink]="['/user']", [routerLinkActive]="'active'") {{ user.name }}
+
+.container: .row
+	.col-sm-2.hidden-xs-down
+		br
+		br
+		ul.nav.nav-pills.flex-column.nav-profile.text-sm-center
+			li.nav-item: a.nav-link([routerLink]="['/user']", [routerLinkActive]="'active'")
+				div(style="display:block; text-align: center;")
+					i.fa-fw.fa.fa-4x.fa-user
+				span.profile-text My Profile
+			li.nav-item(*ngIf="!hasMembership"): a.nav-link([routerLink]="['/membership']", [routerLinkActive]="'active'")
+				div(style="display:block; text-align: center;")
+					i.fa-fw.fa-4x.icon-profile
+				span.profile-text Application
+			div(*ngIf="hasMembership")
+				li.nav-item: a.nav-link([routerLink]="['/schedule']", [routerLinkActive]="'active'")
+					div(style="display:block; text-align: center;")
+						i.fa-fw.fa-4x.icon-date
+					span.profile-text Schedule
+				li.nav-item: a.nav-link([routerLink]="['/history']", [routerLinkActive]="'active'")
+					div(style="display:block; text-align: center;")
+						i.fa-fw.fa.fa-4x.fa-history
+					span.profile-text History
+				li.nav-item: a.nav-link([routerLink]="['/wages']", [routerLinkActive]="'active'")
+					div(style="display:block; text-align: center;")
+						i.fa-fw.fa-4x.icon-pig
+					span.profile-text Wages
+			li.nav-item: a.nav-link([routerLink]="['/help']", [routerLinkActive]="'active'")
+				div(style="display:block; text-align: center;")
+					i.fa-fw.fa-4x.icon-help
+				span.profile-text Help
+
+	.col-sm-10: router-outlet
+
+.clearfix
+br
+
+footer.bg-faded: .container-fluid(style="padding-top: 30px;")
+	ul.nav.flex-column
+		li.nav-item: a.nav-link Privacy policy
+		li.nav-item: a.nav-link Terms &amp; Conditions
+
+
+	p.text-sm-center.text-muted ©2016 Maple Intelligence Pte Ltd Group Limited. All Rights Reserved

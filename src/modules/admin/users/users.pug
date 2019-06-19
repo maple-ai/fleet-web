@@ -1,0 +1,19 @@
+.container-fluid: table.table.table-hover.table-sm.table-maple
+	thead: tr
+		th: .input-group
+			input.form-control.form-control-sm(placeholder="Name", [(ngModel)]="search.name", name="name", (ngModelChange)="doSearch()", style="border-bottom-right-radius: 0; border-top-right-radius: 0;")
+			.input-group-addon(style="padding: 0; border: 0;")
+				button.btn.btn-secondary.btn-sm([class.active]="sortName", (click)="updateSort()")
+					i.fa.fa-fw([class.fa-sort-alpha-asc]="!sortName", [class.fa-sort-numeric-asc]="sortName")
+					|  sort
+		th &nbsp;
+		th: .input-group: input.form-control.form-control-sm(placeholder="Email", [(ngModel)]="search.email", name="email", (ngModelChange)="doSearch()")
+		th: .input-group: input.form-control.form-control-sm(placeholder="Membership", [(ngModel)]="search.membership", name="membership", (ngModelChange)="doSearch()")
+		th: .input-group: input.form-control.form-control-sm(placeholder="Driver License", [(ngModel)]="search.driver_license", name="driver_license", (ngModelChange)="doSearch()")
+
+	tbody: tr(*ngFor="let user of users", (click)="openUser(user)", style="cursor: pointer;", [class.bg-information]="user.membership.license == 'full'")
+		td {{ user.name }}
+		td {{ user.membership.work_city }}
+		td {{ user.email }}
+		td {{ user.membership.id }}
+		td <strong>{{ user.membership.license }}</strong>: {{ user.membership.driver_license }}

@@ -1,0 +1,25 @@
+.navbar.navbar-light.navbar-maple.navbar-full.navbar-toggleable
+	a.navbar-brand([routerLink]="['users']"): img.img-fluid(src="../../assets/maple-logo.png" style="max-height: 30px;")
+	ul.nav.navbar-nav.mr-auto
+		li.nav-item: a.nav-link([routerLink]="['users']", [routerLinkActive]="['active']") Drivers
+		li.nav-item: a.nav-link([routerLink]="['bikes']", [routerLinkActive]="['active']") Bikes
+		li.nav-item: a.nav-link([routerLink]="['shifts']", [routerLinkActive]="['active']") Shifts
+		li.nav-item: a.nav-link(href="http://gps.maple.com" target="_blank") GPS
+	ul.nav.navbar-nav.mr-0
+		li.nav-item: a.nav-link([routerLink]="['../user']", [routerLinkActive]="['active']") {{ user.name }}
+
+br
+router-outlet
+
+.clearfix
+br
+
+footer.bg-faded: .container-fluid.text-center(style="padding-top: 30px; padding-bottom: 30px;")
+	br
+	br
+	br
+	br
+	p Maple Intelligence Pte Ltd Group Limited, 90 Jermyn Street, London, SQ1Y 6JD
+	div Registered in England &amp; Wales No.9941782
+		.clearfix
+		| VAT Registered No. 238 3356 00

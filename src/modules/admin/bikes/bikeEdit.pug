@@ -1,0 +1,84 @@
+.container
+	form
+		.form-group.row
+			.offset-sm-4.col-sm-8
+				h1(*ngIf="!bike._id") New Bike
+				h1(*ngIf="bike._id") Edit Bike
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Registration
+			.col-sm-6
+				input.form-control(type="text" placeholder="Registration of vehicle", [(ngModel)]="bike.registration", name="registration")
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Bike Number
+			.col-sm-6
+				input.form-control(type="number" placeholder="Bike Number", [(ngModel)]="bike.bike_number", name="bike_number")
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Engine Size
+			.col-sm-6
+				input.form-control(type="number" placeholder="Engine Size (CC)", [(ngModel)]="bike.engine_size", name="engine_size")
+
+		.from-group.row
+			.col-sm-6.offset-sm-4: .checkbox: label
+				input(type="checkbox", [(ngModel)]="bike.available", name="available")
+				|  Available
+
+		//- .form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Price
+			.col-sm-6
+				input.form-control(type="number" min="0" step="0.01" placeholder="gbp pence charged per hour", [(ngModel)]="bike.price", name="price")
+				small.text-muted in £, specifies how much users get charged per hour. 300 == £3.00 / hr
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Garage
+			.col-sm-6
+				select.form-control([(ngModel)]="bike.garage_id", name="garage_id")
+					option(value="" selected disabled) -- Select Garage --
+					option(*ngFor="let garage of garages", [value]="garage._id") {{ garage.name }}
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Registration Date
+			.col-sm-6
+				input.form-control(type="date", [(ngModel)]="bike.registration_date", name="registration_date")
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right VIN
+			.col-sm-6
+				input.form-control(type="text" placeholder="Vehicle Identification Number", [(ngModel)]="bike.vin", name="vin")
+
+		.form-group.row
+			.col-sm-6.offset-sm-4
+				p.help-text.text-muted(*ngIf="bike.archived") Cannot edit archived vehicles. This vehicle was archived because:
+				pre.text-muted(*ngIf="bike.archived") {{ bike.archived_reason }}
+
+				button.btn.btn-primary((click)="save()", [disabled]="bike.archived")
+					span(*ngIf="!bike._id") Create
+					span(*ngIf="bike._id") Save
+
+		hr
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Tracker ID
+			.col-sm-6
+				input.form-control(type="number", [(ngModel)]="bike.tracker_id", name="tracker_id")
+				p.form-text <strong>Do not</strong> touch if you don't know what this is
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Tracker Phone Number
+			.col-sm-6
+				input.form-control(type="text", [(ngModel)]="bike.phone_number", name="phone_number")
+
+		.form-group.row
+			label.col-form-label.col-sm-4.text-sm-right Tracker Device ID
+			.col-sm-6
+				input.form-control(type="text", [(ngModel)]="bike.device_id", name="device_id")
+
+div(*ngIf="bike._id && !bike.archived"): .container(style="padding-top: 30px; padding-bottom: 30px;")
+	.row: .col-sm-6.offset-sm-4
+		div(*ngIf="wantsDelete")
+			br
+			textarea.form-control([(ngModel)]="deleteReason" placeholder="Why are you archiving this bike?" rows="3")
+			br
+
+		button.btn.btn-secondary((click)="delete()") Archive this bike

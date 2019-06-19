@@ -1,0 +1,45 @@
+.container
+	br
+
+	.row
+		.col-sm-6.col-12
+			h2.text-primary Profile
+			.form-group(*ngIf="membership != null && membership.approved")
+				label Membership ID
+				input.form-control.custom-field.id-field(type="text", [(ngModel)]="membership.id", disabled name="membership_id")
+			.form-group
+				label Name
+				input.form-control.custom-field.user-field(type="text", [(ngModel)]="user.name", name="name")
+			.form-group
+				label Email Address
+				input.form-control.custom-field.email-field(type="email", [(ngModel)]="user.email", name="email")
+			.form-group(*ngIf="membership != null && membership.approved")
+				label Phone Number
+				input.form-control.custom-field.phone-field(type="text", [(ngModel)]="membership.phone_number", name="phone_number")
+			fieldset(*ngIf="membership != null && membership.approved")
+				include ../membership/membership.address.pug
+
+			.form-group(*ngIf="status.length > 0"): p.help-text {{ status }}
+			.form-group
+				button.btn.btn-primary((click)="saveProfile()") Save Profile
+
+		.col-sm-6.col-12
+			h2.text-primary Password Change
+			.form-group(*ngIf="newPassword.status.length > 0"): p.help-text {{ newPassword.status }}
+			.form-group
+				label New Password
+				input.form-control.custom-field.lock-field(type="password", [(ngModel)]="newPassword.password", placeholder="Enter New Password" name="password")
+			div(*ngIf="newPassword.password.length > 0")
+				.form-group
+					label New Password Confirmation
+					input.form-control.custom-field.lock-field(type="password", [(ngModel)]="newPassword.confirm", placeholder="Confirm New Password", name="passwordConfirm")
+				.form-group
+					label Current Password
+					input.form-control.custom-field.lock-field(type="password", [(ngModel)]="newPassword.current", name="currentPassword")
+				.form-group
+					button.btn.btn-primary((click)="changePassword()", [disabled]="newPassword.password != newPassword.confirm || newPassword.current.length == 0") Change Password
+
+			div(*ngIf="membership != null && membership.approved")
+				h2.text-primary Driving Licence: {{ membership.license }}
+
+			button.btn.btn-primary.btn-block((click)="logout()") Log Out

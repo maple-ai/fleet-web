@@ -1,0 +1,58 @@
+br
+
+.row
+  .col-sm-4
+    form
+      .form-group
+        label Name
+        input.form-control(type="text", [(ngModel)]="user.name", name="name_change")
+
+      span(*ngIf="nameStatus && nameStatus.length > 0") {{ nameStatus }}
+      button.btn.btn-block.btn-primary((click)="changeName()") Update Name
+    br
+    form
+      .form-group
+        label Email Address
+        input.form-control(type="email", [(ngModel)]="email", name="email_addr")
+
+      span(*ngIf="emailStatus && emailStatus.length > 0") {{ emailStatus }}
+      button.btn.btn-block.btn-primary((click)="changeEmail()") Update Email Address
+    br
+    form
+      .form-group
+        label New Password
+        input.form-control(type="text", [(ngModel)]="newPassword", name="new_user_password")
+
+      span(*ngIf="passwordStatus && passwordStatus.length > 0") {{ passwordStatus }}
+      button.btn.btn-block.btn-primary((click)="changePassword()") Update Password
+  .col-sm-4
+    .alert.alert-info(*ngIf="privilegeStatus && privilegeStatus.length > 0") {{ privilegeStatus }}
+
+    .form-group
+      label User Role
+      .btn-group.btn-block
+        button.btn([class.btn-secondary]="user.userType != 'driver'", [class.btn-warning]="user.userType == 'driver'", (click)="setPrivilege('driver')") Driver
+
+    .form-group
+      label Attendant roles
+      .btn-group.btn-block
+        button.btn([class.btn-secondary]="user.userType != 'supervisor'", [class.btn-warning]="user.userType == 'supervisor'", (click)="setPrivilege('supervisor')") Attendant
+        button.btn([class.btn-secondary]="user.userType != 'mechanic'", [class.btn-warning]="user.userType == 'mechanic'", (click)="setPrivilege('mechanic')") Mechanic
+
+    .form-group
+      label Admin roles
+      .btn-group.btn-block
+        button.btn([class.btn-secondary]="user.userType != 'admin'", [class.btn-warning]="user.userType == 'admin'", (click)="setPrivilege('admin')") HQ User
+        button.btn([class.btn-secondary]="user.userType != 'superadmin'", [class.btn-warning]="user.userType == 'superadmin'", (click)="setPrivilege('superadmin')") Super HQ User
+  .col-sm-4
+    button.btn.btn-warning.btn-block((click)="block()")
+      span(*ngIf="user.blocked")
+        i.fa.fa-fw.fa-check
+        |  Unblock User
+      span(*ngIf="!user.blocked")
+        i.fa.fa-fw.fa-ban
+        |  Block User
+    br
+    button.btn.btn-danger.btn-block((click)="deleteUser()")
+      i.fa.fa-fw.fa-warning
+      |  Nuclear Delete

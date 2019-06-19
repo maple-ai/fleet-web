@@ -1,0 +1,53 @@
+h2.text-primary Your photo
+.form-group
+	label Please take a selfie or upload passport-like photo
+		span(*ngIf="(uploader_selfie.queue.length > 0 && uploader_selfie.queue[0]?.isSuccess) || status.license_selfie")  (upload completed)
+		span.text-danger(*ngIf="uploader_selfie.error && uploader_selfie.error.length > 0")  (Error: {{ uploader_selfie.error }})
+	input.form-control(type="file" ng2FileSelect, [uploader]="uploader_selfie", name="license_selfie", *ngIf="!status.license_selfie && (uploader_selfie.queue.length == 0 || !uploader_selfie.queue[0]?.isSuccess)")
+	.progress
+		.progress-bar([style.width.%]="uploader_selfie.queue[0]?.progress", max="100", *ngIf="!status.license_selfie")
+
+h2.text-primary Passport
+.form-group
+	label Upload a picture of the page of your passport containing your picture and passport number
+		span(*ngIf="(uploader_passport.queue.length > 0 && uploader_passport.queue[0]?.isSuccess) || status.license_passport")  (upload completed)
+		span.text-danger(*ngIf="uploader_passport.error && uploader_passport.error.length > 0")  (Error: {{ uploader_passport.error }})
+	input.form-control(type="file" ng2FileSelect, [uploader]="uploader_passport", name="license_passport", *ngIf="!status.license_passport && (uploader_passport.queue.length == 0 || !uploader_passport.queue[0]?.isSuccess)")
+	.progress(*ngIf="!status.license_passport")
+		.progress-bar([style.width.%]="uploader_passport.queue[0]?.progress", max="100")
+
+h2.text-primary Drivers Licence
+.form-group
+	label Drivers' Licence: Front
+		span(*ngIf="(uploader_front.queue.length > 0 && uploader_front.queue[0]?.isSuccess) || status.license_front")  (upload completed)
+		span.text-danger(*ngIf="uploader_front.error && uploader_front.error.length > 0")  (Error: {{ uploader_front.error }})
+	input.form-control(type="file" ng2FileSelect, [uploader]="uploader_front", name="license_photo", *ngIf="!status.license_front && (uploader_front.queue.length == 0 || !uploader_front.queue[0]?.isSuccess)")
+	.progress(*ngIf="!status.license_front")
+		.progress-bar([style.width.%]="uploader_front.queue[0]?.progress", max="100")
+
+.form-group
+	label Drivers' Licence: Back
+		span(*ngIf="(uploader_back.queue.length > 0 && uploader_back.queue[0]?.isSuccess) || status.license_back")  (upload completed)
+		span.text-danger(*ngIf="uploader_back.error && uploader_back.error.length > 0")  (Error: {{ uploader_back.error }})
+	input.form-control(type="file" ng2FileSelect, [uploader]="uploader_back", name="license_back", *ngIf="!status.license_back && (uploader_back.queue.length == 0 || !uploader_back.queue[0]?.isSuccess)")
+	.progress(*ngIf="!status.license_back")
+		.progress-bar([style.width.%]="uploader_back.queue[0]?.progress", max="100")
+
+.form-group(*ngIf="membership.license == 'cbt'")
+	label CBT Certificate
+		span(*ngIf="(uploader_cbt.queue.length > 0 && uploader_cbt.queue[0]?.isSuccess) || status.license_cbt")  (upload completed)
+	input.form-control(type="file" ng2FileSelect, [uploader]="uploader_cbt", name="license_cbt", *ngIf="!status.license_cbt && (uploader_cbt.queue.length == 0 || !uploader_cbt.queue[0]?.isSuccess)")
+	.progress(*ngIf="!status.license_cbt")
+		.progress-bar([style.width.%]="uploader_cbt.queue[0]?.progress", max="100")
+
+h2.text-primary Utility Bill
+.form-group
+	label Utility Bill
+		span(*ngIf="(uploader_utility.queue.length > 0 && uploader_utility.queue[0]?.isSuccess) || status.utility_bill")  (upload completed)
+		span.text-danger(*ngIf="uploader_utility.error && uploader_utility.error.length > 0")  (Error: {{ uploader_utility.error }})
+	input.form-control(type="file" ng2FileSelect, [uploader]="uploader_utility", name="utility_bill", *ngIf="!status.utility_bill && (uploader_utility.queue.length == 0 || !uploader_utility.queue[0]?.isSuccess)")
+	.progress(*ngIf="!status.utility_bill")
+		.progress-bar([style.width.%]="uploader_utility.queue[0]?.progress", max="100")
+
+button.btn.btn-primary(*ngIf="!((status.utility_bill || uploader_utility.queue[0]?.isSuccess) && (status.license_selfie || uploader_selfie.queue[0]?.isSuccess) && (status.license_passport || uploader_passport.queue[0]?.isSuccess) && (status.license_back || uploader_back.queue[0]?.isSuccess) && (status.license_front || uploader_front.queue[0]?.isSuccess) && (status.license_cbt || uploader_cbt.queue[0]?.isSuccess))", (click)="uploadLicenses()") Upload Files
+button.btn.btn-business(*ngIf="((status.utility_bill || uploader_utility.queue[0]?.isSuccess) || (status.license_selfie || uploader_selfie.queue[0]?.isSuccess) || (status.license_passport || uploader_passport.queue[0]?.isSuccess) || (status.license_back || uploader_back.queue[0]?.isSuccess) || (status.license_front || uploader_front.queue[0]?.isSuccess) || (status.license_cbt || uploader_cbt.queue[0]?.isSuccess))", (click)="resetUpload()", style="margin-left: 16px") Reset Uploads

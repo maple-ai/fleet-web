@@ -1,0 +1,12 @@
+.container-fluid
+	table.table.table-maple
+		thead: tr
+			th Name
+			th Capacity
+			th Location
+			th(*ngIf="canEdit"): a.btn.btn-primary.btn-sm.btn-no-radius.float-right([routerLink]="['./new']") new garage
+		tbody: tr(*ngFor="let garage of garages")
+			td {{ garage.name }}
+			td {{ garage.capacity }}
+			td: a([href]="'https://www.google.co.uk/maps/@' + garage.location.lat + ',' + garage.location.lng + ',14z'" target="_blank") {{ garage.location.lat }},{{ garage.location.lng }} (google maps <i class="fa fa-fw fa-external-link"></i>)
+			td(*ngIf="canEdit"): a.btn.btn-sm.btn-secondary.float-sm-right([routerLink]="['./', garage._id]") Edit

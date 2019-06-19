@@ -1,0 +1,101 @@
+.admin-membership-form
+	br
+
+	form: .row
+		.col-sm-4
+			include ../../membership/membership.driverDetails.pug
+
+		.col-sm-4
+			include ../../membership/membership.address.pug
+
+			.form-group
+				.checkbox: label
+					input(type="checkbox", [(ngModel)]="membership.insurance", name="insurance")
+					|  Added to MCE Insurance
+				label Date Added
+				input.form-control(type="text", placeholder="Date Added", [(ngModel)]="membership.insurance_added", name="insurance_added")
+			.form-group
+				label Private notes
+				textarea.form-control([(ngModel)]="membership.private_notes", name="notes" rows="15")
+
+			p.text-muted.text-sm-center {{ status }}
+			button.btn.btn-block.btn-primary((click)="updateMembership()", *ngIf="canEdit") Save Membership changes
+
+		.col-sm-4
+			div(*ngIf="canEdit")
+				h2.text-primary Membership Actions
+				div(*ngIf="!membership.approved")
+					button.btn.btn-danger.btn-block((click)="acceptApplication(false)") Delete Application
+					button.btn.btn-success.btn-block((click)="acceptApplication(true)") Accept Application
+
+					br
+
+					form
+						legend On Boarding Session
+						.form-group
+							input.form-control(type="text", [(ngModel)]="membership.interview_date", name="interview_date" placeholder="DD/MM/YYYY")
+						.form-group
+							input.form-control(type="time", [(ngModel)]="membership.interview_time", name="interview_time")
+
+						p {{ interviewDateStatus }}
+						button.btn.btn-secondary.btn-block((click)="updateInterviewDate()") Save On Boarding Session Date
+
+			div(*ngIf="membership.approved")
+				.row
+					strong.col-sm-3.text-sm-right Approved:
+					.col-sm-9 {{ membership.approvedDateFormatted }}
+
+				button.btn.btn-block.btn-primary((click)="moveToOnboarding()") Move back to Onboarding section
+
+			hr(*ngIf="canEdit")
+
+			div(*ngIf="editImages")
+				include ../../membership/uploads.pug
+
+			div(*ngIf="!editImages")
+				legend Drivers' Selfie
+				a(target="_blank", [href]="getDriverLicenseSrc('selfie')")
+					img.img-thumbnail([src]="getDriverLicenseSrc('selfie')")
+
+				legend Passport
+				a(target="_blank", [href]="getDriverLicenseSrc('passport')")
+					img.img-thumbnail([src]="getDriverLicenseSrc('passport')")
+
+				legend Drivers' Licence: Front
+				a(target="_blank", [href]="getDriverLicenseSrc('front')")
+					img.img-thumbnail([src]="getDriverLicenseSrc('front')")
+
+				legend Drivers' Licence: Back
+				a(target="_blank", [href]="getDriverLicenseSrc('back')")
+					img.img-thumbnail([src]="getDriverLicenseSrc('back')")
+
+				div(*ngIf="membership.license == 'cbt'")
+					legend CBT Certificate
+					//- a.btn.btn-secondary.btn-block(target="_blank", [href]="getDriverLicenseSrc('cbt')") Open certificate
+					a(target="_blank", [href]="getDriverLicenseSrc('cbt')")
+						img.img-thumbnail([src]="getDriverLicenseSrc('cbt')")
+				
+				legend Utility Bill
+				a(target="_blank", [href]="getDriverLicenseSrc('utility')")
+					img.img-thumbnail([src]="getDriverLicenseSrc('utility')")
+
+			br
+
+			button.btn((click)="editImages = !editImages", [class.btn-business]="!editImages", [class.btn-primary]="editImages", *ngIf="canEdit")
+				span(*ngIf="!editImages") Edit Images
+				span(*ngIf="editImages") Done Editing
+			button.btn.btn-danger(*ngIf="editImages && canEdit", (click)="deleteImages()") Delete Images
+
+			//-
+				legend Payment Method
+				form
+					.form-group
+						label Card Number
+						input.form-control(type="text", [value]="'**** **** **** ' + cardDetails?.last4", disabled, name="cc_last4")
+					.form-group
+						label Expiry Date
+						input.form-control(type="text", [value]="cardDetails?.exp_month + '/' + cardDetails?.exp_year", disabled, name="cc_expiry")
+					.form-group: label CVC Check: ({{ cardDetails?.cvc_check }})
+
+					a.btn.btn-block.btn-secondary([href]="getStripeHref(cardDetails)", target="_blank") Open in Stripe&nbsp;
+						i.fa.fa-fw.fa-external-link

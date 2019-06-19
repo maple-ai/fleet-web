@@ -1,0 +1,44 @@
+.alert.alert-info(*ngIf="operatorNotesStatus && operatorNotesStatus.length > 0") {{ operatorNotesStatus }}
+
+form
+	.form-group
+		label Condition Checked at (date)
+		input.form-control(type="text" disabled, [value]="operatorNotes.checkedAtFormatted")
+	.form-group(*ngIf="canEditNotes && operatorNotes.checkedAtFormatted == 'never'")
+		button.btn.btn-primary((click)="checkedCondition()") I've checked the bike's condition
+	.form-group
+		label Condition
+		textarea.form-control([(ngModel)]="operatorNotes.condition", name="condition")
+	.form-group
+		label Bike Maintenance Notes
+		textarea.form-control([(ngModel)]="operatorNotes.notes", name="notes")
+
+		.input-group(style="margin-top: 5px;")
+			span.input-group-btn
+				button.btn((click)="requestMechanicAttention()", [class.btn-secondary]="!operatorNotes.mechanic_required", [class.btn-warning]="operatorNotes.mechanic_required")
+					i.fa.fa-fw([class.fa-bell-o]="!operatorNotes.mechanic_required", [class.fa-bell-slash-o]="operatorNotes.mechanic_required")
+					span(*ngIf="operatorNotes.mechanic_required && isMechanic")  Acknowledge Alert
+					span(*ngIf="!isMechanic || (!operatorNotes.mechanic_required && isMechanic)")  Alert Mechanic
+			input.form-control(type="text", [(ngModel)]="operatorNotes.mechanic_alert_reason", name="mechanic_alert_reason", placeholder="Alert Reason", *ngIf="operatorNotes.mechanic_required")
+	.form-group
+		label Fuel Level
+		.clearfix
+		.btn-group
+			- var level = 1
+			while level <= 10
+				button.btn.btn-no-radius([class.btn-primary]="operatorNotes.fuel_level == " + level, [class.btn-secondary]="operatorNotes.fuel_level != " + level, (click)="setFuelLevel(" + level + ")")!= level++
+	.form-check
+		label.form-check-label
+			input.form-check-input(type="checkbox" name="locked_up", [(ngModel)]="operatorNotes.locked_up")
+			| &nbsp;Locked Up
+	.form-check
+		label.form-check-label
+			input.form-check-input(type="checkbox" name="clothes_returned", [(ngModel)]="operatorNotes.clothes_returned")
+			| &nbsp;Helmet/Jacket/Trousers returned
+	.form-check
+		label.form-check-label
+			input.form-check-input(type="checkbox" name="key_returned", [(ngModel)]="operatorNotes.key_returned")
+			| &nbsp;Key Returned
+
+	.form-group(*ngIf="canEditNotes")
+		button.btn.btn-primary((click)="saveOperatorNotes()") Save Operator Notes

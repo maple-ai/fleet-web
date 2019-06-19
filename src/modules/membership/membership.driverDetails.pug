@@ -1,0 +1,87 @@
+h2.text-primary Driver Details
+.form-group
+  label Where would you like to work?
+  select.form-control([(ngModel)]="membership.work_city", name="work_city")
+    option(*ngFor="let g of garages", [value]="g.name") {{ g.name }}
+.form-group
+  label Date of Birth
+  input.form-control.custom-field.calendar-field(type="text", [(ngModel)]="membership.dob", name="dob", placeholder="DD/MM/YYYY")
+.form-group
+  label Phone Number
+  input.form-control.custom-field.phone-field(type="text", [(ngModel)]="membership.phone_number", name="phone_number")
+.form-group
+  label Nationality
+  input.form-control.custom-field.house-field(type="text", [(ngModel)]="membership.nationality", name="nationality")
+.form-group
+  label Drivers' Licence Number
+  input.form-control.custom-field.id-field(type="text", [(ngModel)]="membership.driver_license", name="driver_license")
+.form-group
+  label National Insurance Number
+  input.form-control.custom-field.id-field(type="text", [(ngModel)]="membership.national_insurance", name="national_insurance")
+.form-group
+  label Drivers' Licence Check Code
+  input.form-control.custom-field.id-field(type="text", [(ngModel)]="membership.check_code", name="check_code")
+  p: a((click)="showCheckCodeHelp()", style="color: #07aa88; text-decoration: none; cursor: pointer;") How do I get this?
+.form-group
+  label PayPal Payout Email Address - we need this so we can pay you! (Optional)
+  input.form-control.custom-field.card-field(type="email", [(ngModel)]="membership.paypal_email", name="paypal_email")
+  p: a(href="https://www.paypal.com/uk/signup/account" target="_blank") Sign up to PayPal
+.form-group
+  label UTR Number (Optional) (set up at <a href="https://www.gov.uk/set-up-sole-trader">gov.uk/set-up-sole-trader</a>)
+  input.form-control(type="text", [(ngModel)]="membership.utr", name="utr")
+  p Please register for a UTR number at the link above
+.form-group
+  label Right to work in the United Kingdom
+  .custom-controls-stacked
+    label.custom-control.custom-radio
+      input.custom-control-input(type="radio" name="work_declaration", (click)="membership.work_declaration = 'eu_passport'", [checked]="membership.work_declaration == 'eu_passport'")
+      span.custom-control-indicator
+      span.custom-control-description UK/EU Passport
+    label.custom-control.custom-radio
+      input.custom-control-input(type="radio" name="work_declaration", (click)="membership.work_declaration = 'indefinite_leave'", [checked]="membership.work_declaration == 'indefinite_leave'")
+      span.custom-control-indicator
+      span.custom-control-description Indefinite leave to remain
+    label.custom-control.custom-radio
+      input.custom-control-input(type="radio" name="work_declaration", (click)="membership.work_declaration = 'visa'", [checked]="membership.work_declaration == 'visa'")
+      span.custom-control-indicator
+      span.custom-control-description Visa
+    .clearfix
+  .clearfix
+//-.form-group
+  label.custom-control.custom-checkbox
+    input.custom-control-input(type="checkbox", [(ngModel)]="membership.criminal_record", name="criminal_record")
+    span.custom-control-indicator
+    span.custom-control-description I do not have a Criminal Record
+//-.form-group(*ngIf="!membership.criminal_record")
+  label Criminal Record Details
+  textarea.form-control(rows="5", [(ngModel)]="membership.criminal_record_details", name="criminal_record_details")
+.form-group
+  label Type of Motorcycle Licence
+  .custom-controls-stacked
+    label.custom-control.custom-radio
+      input.custom-control-input(type="radio", [(ngModel)]="membership.license", value="cbt" name="license")
+      span.custom-control-indicator
+      span.custom-control-description CBT Certificate
+    label.custom-control.custom-radio
+      input.custom-control-input(type="radio", [(ngModel)]="membership.license", value="full", name="license")
+      span.custom-control-indicator
+      span.custom-control-description Full Motorcycle License
+    .clearfix
+  .clearfix
+.form-group
+  label Bike Ownership
+  .custom-controls-stacked
+    label.custom-control.custom-checkbox
+      input.custom-control-input(type="checkbox", [(ngModel)]="membership.use_own_bike", name="use_own_bike")
+      span.custom-control-indicator
+      span.custom-control-description I want to use my own bike
+  .clearfix
+.form-group(*ngIf="membership.license == 'cbt'")
+  label CBT Expiry Date
+  input.form-control.custom-field.calendar-field(type="text", [(ngModel)]="membership.cbt_expiry", name="cbt_expiry", placeholder="DD/MM/YYYY")
+.form-group
+  label Driver License Expiry Date
+  input.form-control.custom-field.calendar-field(type="text", [(ngModel)]="membership.driver_license_expiry", name="driver_license_expiry", placeholder="DD/MM/YYYY")
+.form-group
+  label Next of Kin Name and Phone Number
+  input.form-control.custom-field.calendar-field(type="text", [(ngModel)]="membership.next_of_kin", name="next_of_kin")

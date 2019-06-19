@@ -1,0 +1,48 @@
+.container
+	br
+	.alert.alert-success(*ngIf="membership.approved")
+		strong Application Approved!
+		p(style="margin-bottom: 0") Your membership number is: <i>{{ membership.id }}</i>
+	.alert.alert-success(*ngIf="membership.submitted && !membership.approved")
+		strong Application Submitted!
+		p(style="margin-bottom: 0", *ngIf="membership.interview_date") Pending On Boarding Session at {{ membership.interview_date }}
+		p(style="margin-bottom: 0", *ngIf="!membership.interview_date") It is currently pending review. We'll get back to you shortly.
+
+	br
+
+	.row(*ngIf="!membership.submitted"): .col-sm-8.offset-sm-2.col-12: form
+		.form-group(*ngIf="status.message.length > 0"): p.help-text {{ status.message }}
+
+		fieldset
+			include ./membership.driverDetails.pug
+
+		fieldset
+			include ./uploads.pug
+
+		br
+
+		fieldset
+			include membership.address.pug
+
+		br
+
+		.form-group
+			button.btn.btn-business((click)="saveProgress()", [disabled]="membership.submitted") Save Progress
+			button.btn.btn-primary((click)="submitApplication()", [disabled]="membership.submitted", style="margin-left: 16px") Submit Application
+
+		.form-group(*ngIf="status.message.length > 0"): p.help-text {{ status.message }}
+
+.modal.fade(bsModal, #checkCodeHelp="bs-modal", tabindex="-1" role="dialog"): .modal-dialog
+	.modal-content
+		.modal-header
+			h4.modal-title Check Code Help
+		.modal-body
+			p.text-sm-center You need to go to the DVLA website and take a copy of your check-code for our insurers:
+			p.text-sm-center Search "DVLA Driving Record" on Google
+			p.text-sm-center Or call 0800 083 0013
+			p.text-sm-center You will need:
+			ol.text-sm-center
+				li Driving License number
+				li National Insurance Number
+				li Postcode
+			p.text-sm-center Make sure you click on 'Share Code' then copy the <strong>CASE SENSITIVE</strong> code into the box below.

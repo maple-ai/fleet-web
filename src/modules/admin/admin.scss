@@ -1,0 +1,31 @@
+.navbar.navbar-light.bg-faded {
+	background: #006AB5;
+
+	.nav-item a {
+		color: white;
+	}
+}
+
+/deep/ {
+	// admin messages list
+	.messages-list {
+		display: block;
+		min-height: 30px;
+		padding: 10px 7px;
+
+		&:hover {
+			background: #EEE;
+			cursor: pointer;
+		}
+	}
+
+	.messages-container, .messages-list-container {
+		height: 100vh;
+		height: calc(100vh - 100px);
+		overflow-y: scroll;
+	}
+
+	.messages-list:not(:last-child) {
+		border-bottom: 1px solid #CCC;
+	}
+}

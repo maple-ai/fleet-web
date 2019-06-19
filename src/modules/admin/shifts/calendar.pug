@@ -1,0 +1,50 @@
+.container-fluid
+	.row
+		.col-sm-4
+			button.btn.btn-link.float-sm-right((click)="navigateDay(false)"): i.fa.fa-fw.fa-arrow-left
+		.col-sm-4
+			h4.text-sm-center {{ currentDay.dayFormatted }}
+		.col-sm-4
+			button.btn.btn-link((click)="navigateDay(true)"): i.fa.fa-fw.fa-arrow-right
+
+			button.btn.float-sm-right.btn-no-radius((click)="jumpToday()", [class.btn-secondary]="trueTodayFormatted == currentDay.dayFormatted", [class.btn-primary]="trueTodayFormatted != currentDay.dayFormatted", style="text-transform: none;") Jump to Today
+
+	br
+
+	.row(*ngFor="let section of sections")
+		.col-sm-3(*ngFor="let bike of section"): .card
+			.card-block([class.bg-primary]="bike.shifts.length == 1 && bike.shifts[0].status != 'created'", [class.bg-warning]="bike.shifts.length > 0 && bike.shifts[0].status == 'created'", [class.bg-danger]="bike.shifts.length == 0", style="padding: 1rem;")
+				h5.card-title.text-sm-center(style="margin-bottom: 0;")
+					a([routerLink]="['../../bikes', bike._id, 'maintenance']" style="color: #fff;") \#{{ bike.bike_number }} {{ bike.registration }}
+				p.text-sm-center.card-text(style="color: #FFF", *ngIf="bike.shifts.length == 0") no shifts
+				p.text-sm-center.card-text(style="color: #FFF", *ngIf="bike.shifts.length > 0 && bike.shifts[0].status == 'created'")
+					span(*ngIf="bike.shifts.length > 1") {{ bike.shifts.length }}
+					|  Pending Shifts
+
+			ul.list-group.list-group-flush
+				li.list-group-item(*ngFor="let shift of bike.shifts", style="cursor: pointer;", (click)="openShift(bike, shift)")
+					p.text-sm-center(style="margin-bottom: 0;").
+						{{ shift.user[0]?.name }} {{ shift.date | date:'shortTime' }}
+
+	br
+	table.table(*ngIf="cancelledShifts.length > 0")
+		thead: tr
+			th Rejected Shift
+			th Bike
+			th Reassign
+		tbody: tr(*ngFor="let shift of cancelledShifts")
+			td
+				a([routerLink]="['../../users', shift.user[0]._id, 'membership' ]") {{ shift.user[0]?.name }}
+				|  {{ shift.date | date:'shortTime' }}
+			td \#{{ shift.bike.bike_number }} {{ shift.bike.registration }}
+			td
+				select.form-control([(ngModel)]="shift.reassigned_bike", [name]="shift._id", (ngModelChange)="reassignBike(shift)")
+					option(value="") -- Select new Bike --
+					option(*ngFor="let bike of freeBikes", [value]="bike._id") \#{{ bike.bike_number }} {{ bike.registration }} [{{ bike.engine_size }}cc]
+
+.modal.fade(#shiftModal="bs-modal", bsModal, tabindex="-1"): .modal-dialog.modal-sm
+	.modal-content(*ngIf="selectedShift != null")
+		.modal-header: h4.modal-title {{ selectedShift.user[0]?.name }}
+		.modal-footer
+			button.btn.btn-danger.float-sm-left((click)="removeShift()") Reject
+			button.btn.btn-success((click)="approveShift()") Approve

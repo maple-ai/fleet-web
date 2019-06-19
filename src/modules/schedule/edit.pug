@@ -1,0 +1,42 @@
+.modal.fade(#shiftModal="bs-modal", bsModal, tabindex="-1"): .modal-dialog
+	.modal-content(*ngIf="selectedShift != null")
+		.modal-header
+			h4.modal-title
+				span(*ngIf="selectedShift.shift._id") Shift on {{ selectedShift.day.fullFormat }}
+				span(*ngIf="!selectedShift.shift._id") New shift on {{ selectedShift.day.fullFormat }}
+
+		.modal-body
+			form
+				.form-group(*ngIf="selectedShift.shift._id")
+					label Shift ID
+					input.form-control(type="text" disabled, [value]="selectedShift.shift._id")
+				.form-group
+					label Garage
+					select.form-control([(ngModel)]="selectedShift.shift.garage_id", (ngModelChange)="getAvailability()", [disabled]="selectedShift.shift._id", name="garage_id")
+						option(value="" selected disabled) -- Select Garage --
+						option(*ngFor="let garage of garages", [value]="garage._id") {{ garage.name }}
+
+				.form-group(*ngIf="selectedShift.availability != null")
+					label Bike
+					select.form-control([(ngModel)]="selectedShift.selectedBike", [disabled]="selectedShift.shift._id", name="selectedBike")
+						option(value="" selected disabled) -- Select Bike --
+						option(*ngFor="let bike of selectedShift.availability", [value]="bike._id") \#{{ bike.bike_number }} - {{ bike.engine_size }}cc
+
+				.form-group(*ngIf="selectedShift.shift._id && selectedShift.paid")
+					label Paid Amount
+					input.form-control([value]="'£' + selectedShift.paid_amount", type="text")
+
+				.form-group
+					p(style="white-space: pre") {{ shift_settings.shift_description }}
+
+				.form-group(*ngIf="selectedShift.availability != null")
+					label Shift Start
+					select.form-control([(ngModel)]="selectedShift.preferredHour", name="preferredHour", [disabled]="selectedShift.shift._id")
+						option([value]="0" selected disablde) -- Select Time --
+						option(*ngFor="let hour of selectedShift.availableHours", [value]="hour.hour") {{ hour.name }}
+
+			p.help-text(*ngIf="selectedShift.status.length > 0") {{ selectedShift.status }}
+		.modal-footer
+			button.btn.btn-secondary.float-sm-left((click)="shiftModal.hide()") Dismiss
+			button.btn.btn-danger(*ngIf="selectedShift.shift._id", (click)="cancelShift()") Cancel Shift
+			button.btn.btn-primary.btn-no-radius(*ngIf="!selectedShift.shift._id", [disabled]="selectedShift.selectedBike == null || selectedShift.preferredHour == 0", (click)="createShift()") New Shift

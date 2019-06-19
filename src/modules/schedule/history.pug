@@ -1,0 +1,18 @@
+.container
+  br
+  table.table.table-hover.table-maple.table-sm
+    thead: tr
+      th Date
+      th Start - End
+      th Wages
+    tbody
+      tr(*ngFor="let shift of shifts")
+        td {{ shift.dateFormatted }}
+        td {{ shift.durationFormatted }} hours
+        td
+          span(*ngIf="!shift.paid") £{{ shift.wages }} due
+          span(*ngIf="shift.paid") £{{ shift.totalFormatted }}
+
+  button.btn.btn-primary.float-sm-right((click)="downloadCSV()")
+    i.fa.fa-fw.fa-external-link
+    | &nbsp;Export to CSV

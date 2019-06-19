@@ -1,0 +1,43 @@
+.container-fluid
+	.row
+		.col-sm-6
+			.row
+				strong.col-sm-5.text-sm-right User ID
+				.col-sm-7 {{ user._id }}
+			.row
+				strong.col-sm-5.text-sm-right Name
+				.col-sm-7 {{ user.name }}
+			.row
+				strong.col-sm-5.text-sm-right Email
+				.col-sm-7 {{ user.email }}
+			.row
+				strong.col-sm-5.text-sm-right Created
+				.col-sm-7 {{ user.created }}
+			.row
+				strong.col-sm-5.text-sm-right "I have no unspent Criminal Convictions"
+				.col-sm-7
+					i.fa.fa-fw([class.fa-check]="user.no_unspent_criminal", [class.fa-times]="!user.no_unspent_criminal")
+		.col-sm-6
+			.row
+				strong.col-sm-5.text-sm-right User Type
+				.col-sm-7 {{ userType }}
+			.row(*ngIf="userType == 'driver'")
+				strong.col-sm-5.text-sm-right Member ID
+				.col-sm-7 {{ membership?.id }}
+			.row
+				strong.col-sm-5.text-sm-right
+					i.fa.fa-fw.fa-phone
+					| &nbsp;Number
+				.col-sm-7 {{ membership?.phone_number }}
+			.row
+				strong.col-sm-5.text-sm-right Last Login
+				.col-sm-7 {{ user.lastLogin }}
+
+	br
+	ul.nav.nav-tabs
+		li.nav-item: a.nav-link([routerLink]="['membership']", [routerLinkActive]="['active']") Membership
+		li.nav-item: a.nav-link([routerLink]="['shifts']", [routerLinkActive]="['active']") Shifts
+		li.nav-item: a.nav-link([routerLink]="['wages']", [routerLinkActive]="['active']") Wages
+		li.nav-item(*ngIf="canEdit"): a.nav-link([routerLink]="['profile']", [routerLinkActive]="['active']") Account
+
+	router-outlet

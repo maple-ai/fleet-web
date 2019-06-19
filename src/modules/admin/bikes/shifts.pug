@@ -1,0 +1,19 @@
+.container-fluid
+	h6.text-sm-center.text-muted(*ngIf="!notes || notes.length == 0") No shifts made by this bike yet!
+
+	.row(*ngIf="notes && notes.length > 0")
+		.col-sm-4
+			.card(*ngFor="let note of notes", (click)="openNote(note)", style="cursor: pointer;")
+				.card-block([class.card-inverse]="note.mechanic_required && isMechanic", [class.bg-warning]="note.mechanic_required && isMechanic")
+					h5.card-title {{ note.shiftDateFormatted }}
+						span.float-sm-right(*ngIf="note.mechanic_required"): i.fa.fa-fw.fa-bell-o
+					p.card-text {{ note.bike[0].registration }}
+		.col-sm-8(*ngIf="operatorNotes")
+			h4 Shift at {{ operatorNotes.shiftDateFormatted }}
+				a.btn.btn-link.float-sm-right([routerLink]="['../../../shifts/', operatorNotes.shift[0]._id]") Open Shift Details
+
+			include ../shifts/operator-notes
+		.col-sm-8(*ngIf="!operatorNotes")
+			p.text-muted.text-sm-center
+				i.fa.fa-fw.fa-hand-o-left
+				| &nbsp;select shift
